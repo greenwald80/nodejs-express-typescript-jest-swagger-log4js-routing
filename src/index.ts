@@ -3,9 +3,12 @@ import log4js from 'log4js';
 import { useExpressServer } from 'routing-controllers';
 import { UserController } from './controller/user-controller';
 import httpContext from 'express-http-context';
-import express, { Express } from 'express';
+import express, { Express, RequestHandler } from 'express';
 import bodyParser from 'body-parser';
 import { GlobalErrorHandler } from './middleware/global-error-handler';
+import swaggerUi from 'swagger-ui-express';
+import * as swaggerDocument from '../src/swagger/openapi.json';
+import cors from 'cors';
 
 dotenv.config();
 const logger = log4js.getLogger();
@@ -19,6 +22,9 @@ useExpressServer(app, {
   middlewares: [GlobalErrorHandler], // добавил свой обработчик ошибок
   defaultErrorHandler: false // чтобы не срабатывал дефолтный error handler
 });
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(cors() as RequestHandler);
 
 // в последней версии httpContext можно не писать блок ниже:
 // app.use((req, res, next) => {
