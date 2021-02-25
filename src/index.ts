@@ -5,6 +5,7 @@ import { UserController } from './controller/user-controller';
 import httpContext from 'express-http-context';
 import express, { Express } from 'express';
 import bodyParser from 'body-parser';
+import { GlobalErrorHandler } from './middleware/global-error-handler';
 
 dotenv.config();
 const logger = log4js.getLogger();
@@ -14,13 +15,16 @@ const app: Express = express();
 app.use(bodyParser.json());
 app.use(httpContext.middleware);
 useExpressServer(app, {
-  controllers: [UserController] // we specify controllers we want to use
+  controllers: [UserController], // we specify controllers we want to use
+  middlewares: [GlobalErrorHandler], // добавил свой обработчик ошибок
+  defaultErrorHandler: false // чтобы не срабатывал дефолтный error handler
 });
 
-app.use((req, res, next) => {
-  httpContext.ns.bindEmitter(req);
-  httpContext.ns.bindEmitter(res);
-});
+// в последней версии httpContext можно не писать блок ниже:
+// app.use((req, res, next) => {
+//   httpContext.ns.bindEmitter(req);
+//   httpContext.ns.bindEmitter(res);
+// });
 
 const port = process.env.PORT;
 app.listen(port, () => {

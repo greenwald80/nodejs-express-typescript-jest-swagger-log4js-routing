@@ -3,6 +3,8 @@
     "esModuleInterop": true,
     "outDir": "dist",
     "baseUrl": ".",
-    "sourceMap": true
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   }
 }
