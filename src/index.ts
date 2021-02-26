@@ -9,6 +9,7 @@ import { GlobalErrorHandler } from './middleware/global-error-handler';
 import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument from '../src/swagger/openapi.json';
 import cors from 'cors';
+import config from 'config';
 
 dotenv.config();
 const logger = log4js.getLogger();
@@ -32,7 +33,8 @@ app.use(cors() as RequestHandler);
 //   httpContext.ns.bindEmitter(res);
 // });
 
-const port = process.env.PORT;
+// const port = process.env.PORT;
+const port = config.get('PORT');
 app.listen(port, () => {
   console.log(`Running on port ${port}`);
 }
